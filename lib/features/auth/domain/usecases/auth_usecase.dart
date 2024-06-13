@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:student_management_starter/core/failure/failure.dart';
@@ -20,4 +22,6 @@ class AuthUseCase {
   Future<Either<Failure, bool>> login(String username, String password) {
     return authRepository.login(username, password);
   }
+
+  uploadProfilePicture(File file) {}
 }

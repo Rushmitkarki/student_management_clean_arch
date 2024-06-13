@@ -34,9 +34,8 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
     try {
       final image = await ImagePicker().pickImage(source: imageSource);
       if (image != null) {
-        setState(() {
-          _img = File(image.path);
-        });
+        _img = File(image.path);
+        ref.read(authViewModelProvider.notifier).uploadImage(_img!);
       } else {
         return;
       }
@@ -68,7 +67,6 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
       appBar: AppBar(
         title: const Text('Register'),
         centerTitle: true,
-        
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -260,20 +258,13 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
                   _gap,
                   TextFormField(
                     controller: _passwordController,
-                    obscureText: authState.obscurePassword,
                     decoration: InputDecoration(
                       labelText: 'Password',
                       suffixIcon: IconButton(
-                        icon: Icon(
-                          authState.obscurePassword
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                        icon: const Icon(
+                          Icons.visibility_off,
                         ),
-                        onPressed: () {
-                          ref
-                              .read(authViewModelProvider.notifier)
-                              .obsurePassword();
-                        },
+                        onPressed: () {},
                       ),
                     ),
                     validator: ((value) {
