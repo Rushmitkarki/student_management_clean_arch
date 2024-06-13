@@ -50,9 +50,8 @@ class AuthViewModel extends StateNotifier<AuthState> {
     var data = await authUseCase.uploadProfilePicture(file!);
     data.fold((l) {
       state = state.copyWith(isLoading: false, error: l.error);
-    }, (imageName) {
-      state =
-          state.copyWith(isLoading: false, error: null, imageName: imageName);
+    }, (r) {
+      state = state.copyWith(isLoading: false, error: null, imageName: r);
     });
   }
 
