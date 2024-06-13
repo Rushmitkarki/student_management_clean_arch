@@ -5,16 +5,16 @@ import 'package:student_management_starter/features/batch/data/data_source/remot
 import 'package:student_management_starter/features/batch/domain/entity/batch_entity.dart';
 import 'package:student_management_starter/features/batch/domain/repository/I_batch_repository.dart';
 
-final batchRemoteRepoProvider = Provider<IBatchRepository>(
-  (ref) => BatchRemoteRepoImpl(
+final batchRemoteRepository = Provider(
+  (ref) => BatchRemoteRepository(
     batchRemoteDataSource: ref.read(batchRemoteDataSourceProvider),
   ),
 );
-class BatchRemoteRepoImpl implements IBatchRepository {
+
+class BatchRemoteRepository implements IBatchRepository {
   final BatchRemoteDataSource batchRemoteDataSource;
 
-  BatchRemoteRepoImpl({required this.batchRemoteDataSource});
-
+  BatchRemoteRepository({required this.batchRemoteDataSource});
   @override
   Future<Either<Failure, bool>> addBatch(BatchEntity batch) {
     return batchRemoteDataSource.addBatch(batch);
@@ -22,8 +22,7 @@ class BatchRemoteRepoImpl implements IBatchRepository {
 
   @override
   Future<Either<Failure, bool>> deleteBatch(BatchEntity batch) {
-    // TODO: implement deleteBatch
-    throw UnimplementedError();
+    return batchRemoteDataSource.deleteBatch(batch);
   }
 
   @override

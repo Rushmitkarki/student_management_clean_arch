@@ -56,7 +56,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
             bottom: 10,
             left: MediaQuery.of(context).size.width / 4,
             child: const Text(
-              'Developed by: Rushmit karki',
+              'Developed by: Rushmit',
               style: TextStyle(fontSize: 15),
             ),
           ),

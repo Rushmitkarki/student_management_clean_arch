@@ -5,7 +5,7 @@ import 'package:student_management_starter/features/batch/data/repository/batch_
 import 'package:student_management_starter/features/batch/domain/entity/batch_entity.dart';
 
 final batchRepositoryProvider = Provider((ref) {
-  return ref.watch(batchRemoteRepoProvider);
+  return ref.watch(batchRemoteRepository);
 });
 
 abstract class IBatchRepository {

@@ -4,31 +4,31 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:student_management_starter/app/constants/api_endpoint.dart';
 import 'package:student_management_starter/core/failure/failure.dart';
 import 'package:student_management_starter/core/networking/remote/http_service.dart';
-import 'package:student_management_starter/features/batch/data/dto/get_all_batch_dto.dart';
-import 'package:student_management_starter/features/batch/data/model/batch_api_model.dart';
-import 'package:student_management_starter/features/batch/domain/entity/batch_entity.dart';
+import 'package:student_management_starter/features/course/data/dto/get_all_courses_dto.dart';
+import 'package:student_management_starter/features/course/data/model/course_api_model.dart';
+import 'package:student_management_starter/features/course/domain/entity/course_entity.dart';
 
-final batchRemoteDataSourceProvider = Provider(
-  (ref) => BatchRemoteDataSource(
+final courseRemoteDataSourceProvider = Provider(
+  (ref) => CourseRemoteDataSource(
     dio: ref.read(httpServiceProvider),
-    batchApiModel: ref.read(batchApiModelProvider),
+    courseApiModel: ref.read(courseApiModelProvider),
   ),
 );
 
-class BatchRemoteDataSource {
+class CourseRemoteDataSource {
   final Dio dio;
-  final BatchApiModel batchApiModel;
+  final CourseApiModel courseApiModel;
 
-  BatchRemoteDataSource({
+  CourseRemoteDataSource({
     required this.dio,
-    required this.batchApiModel,
+    required this.courseApiModel,
   });
 
-  Future<Either<Failure, bool>> addBatch(BatchEntity batch) async {
+  Future<Either<Failure, bool>> addCourse(CourseEntity course) async {
     try {
       var response = await dio.post(
-        ApiEndpoints.createBatch,
-        data: batchApiModel.fromEntity(batch).toJson(),
+        ApiEndpoints.createCourse,
+        data: courseApiModel.fromEntity(course).toJson(),
       );
 
       if (response.statusCode == 201) {
@@ -50,9 +50,9 @@ class BatchRemoteDataSource {
     }
   }
 
-  Future<Either<Failure, List<BatchEntity>>> getAllBatches() async {
+  Future<Either<Failure, List<CourseEntity>>> getAllCourses() async {
     try {
-      var response = await dio.get(ApiEndpoints.getAllBatch);
+      var response = await dio.get(ApiEndpoints.getAllCourse);
       if (response.statusCode == 200) {
         // 1st way
         // return Right(
@@ -62,8 +62,9 @@ class BatchRemoteDataSource {
         // );
         // OR
         // 2nd way
-        GetAllBatchDTO batchAddDTO = GetAllBatchDTO.fromJson(response.data);
-        return Right(batchApiModel.toEntityList(batchAddDTO.data));
+        GetAllCoursesDTO courseAddDTO =
+            GetAllCoursesDTO.fromJson(response.data);
+        return Right(courseApiModel.toEntityList(courseAddDTO.data));
       } else {
         return Left(
           Failure(
@@ -78,25 +79,6 @@ class BatchRemoteDataSource {
           error: e.error.toString(),
         ),
       );
-    }
-  }
-
-  Future<Either<Failure, bool>> deleteBatch(BatchEntity batch) async {
-    try {
-      var response =
-          await dio.delete('${ApiEndpoints.deleteBatch}/${batch.batchId}');
-      if (response.statusCode == 200) {
-        return const Right(true);
-      } else {
-        return Left(
-          Failure(
-            error: response.data['message'],
-            statusCode: response.statusCode.toString(),
-          ),
-        );
-      }
-    } on DioException catch (e) {
-      return Left(Failure(error: e.error.toString()));
     }
   }
 }
